@@ -11,8 +11,9 @@ var minifycss = require('gulp-minify-css');
 var concat = require('gulp-concat');
 var del = require('del');
 var rev = require('gulp-rev');
+var less = require('gulp-less');
 
-gulp.task('browser-sync', function() {
+gulp.task('async', function() {
     browserSync({
         files: "**",
         server: {
@@ -67,7 +68,15 @@ gulp.task('del_pack', function(cb) {
     del(['pack_js', 'pack_css'], cb)
 });
 
-gulp.task('async', ["browser-sync"]);
+gulp.task('testLess', function () {
+    gulp.src('./less/*.less')
+        .pipe(less())
+        .pipe(gulp.dest('./css'));
+});
+
+gulp.task('l2c',function(){
+	gulp.watch('./less/*.less',['testLess']);
+})
 
 gulp.task('minify', ['clean','minifycss','minifyjs'], function() {});
 
